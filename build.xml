@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="mm29" default="deploy" basedir="compass" >
+
+    <!-- ##################################################
+        How to use:
+           - set path variables for your local system
+           - go to the path where this bild.xml file is located
+             on your computer
+           - run "ant deploy-preview" or "ant deploy-production"
+             to deploy files
+           - run "ant compile-preview" or "compile-production" 
+             if you only want to compress with compass
+
+    ################################################## -->
+
+
+    <!-- modifie these settings for you computer -->
+    <property name="complass-exec" value="compass"/>
+    <property name="stage-preview-path" value="${basedir}\..\build\preview"/>
+    <property name="stage-prduction-path" value="${basedir}\..\build\production"/>
+
+
+    <!-- create a white-list of files that should be deployed -->
+    <fileset id="deployable" dir="${basedir}">
+        <include name="**/*.html" />
+        <include name="**/*.htm" />
+        <include name="**/*.css" />
+        <include name="**/*.js" />
+        <include name="**/*.png" />
+        <include name="**/*.jpg" />
+    </fileset>
+
+    <!-- set default compile settings -->
+    <target name="compile" depends="compile-preview"/>
+
+    <!-- compile pretty for dev purposes, i.e. no compression, etc. -->
+    <target name="compile-preview">
+        <echo message="compiling with compass ..."/>
+        <exec executable="${complass-exec}" output="compass-output.txt">
+            <arg line="compile --force" />
+        </exec>
+    </target>
+
+    <!-- compile for production purposes, i.e. compresed, etc. -->
+    <target name="compile-production">
+        <echo message="compiling with compass ..."/>
+        <exec executable="${complass-exec}" output="compass-output.txt">
+            <arg line="compile -e production --force" />
+        </exec>
+    </target>
+
+    <!-- define default deployment behaviour -->
+    <target name="deploy" depends="deploy-preview"/>
+
+    <!-- deploy files to production -->
+    <target name="deploy-production" depends="compile-production,clear-sass-cache">
+        <delete dir="${stage-prduction-path}"/>
+        <mkdir dir="${stage-prduction-path}"/>
+        <copy todir="${stage-prduction-path}">
+            <fileset refid="deployable" />
+        </copy>
+    </target>
+
+    <!-- deploy files to preview -->
+    <target name="deploy-preview" depends="compile-preview,clear-sass-cache">
+        <delete dir="${stage-preview-path}"/>
+        <mkdir dir="${stage-preview-path}"/>
+        <copy todir="${stage-preview-path}">
+            <fileset refid="deployable" />
+        </copy>
+    </target>
+
+
+    <!-- deploy files to preview -->
+    <target name="deploy-preview-compress" depends="compile-production">
+        <delete dir="${stage-preview-path}"/>
+        <mkdir dir="${stage-preview-path}"/>
+        <copy todir="${stage-preview-path}">
+            <fileset refid="deployable" />
+        </copy>
+    </target>
+
+    <!-- delete all deployed files -->
+    <target name="clear">
+        <delete dir="${stage-preview-path}"/>
+        <delete dir="${stage-prduction-path}"/>
+    </target>
+
+    <!-- delete all deployed files -->
+    <target name="clear-sass-cache">
+        <echo message="compass clean"/>
+        <!--
+        <exec executable="${complass-exec}" output="compass-output.txt">
+            <arg line="clean" />
+        </exec>
+        -->
+    </target>
+
+
+</project>

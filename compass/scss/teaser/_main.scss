@@ -1,0 +1,25 @@
+
+/*
+    Teaser Main-Content
+*/
+.main-content .text-teaser {
+    padding: 16px 0 15px 13px;
+}
+.main-content .text-teaser img {
+    float: left;
+    margin-right: 16px;
+}
+.main-content .text-teaser h3 {
+    color: #734476;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.main-content .text-teaser p {
+    color: $color-text-main;
+    font-size: 12px;
+    display: inline;
+    margin-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    line-height: 20px;
+}

@@ -1,0 +1,32 @@
+
+/*
+    Sidebar Teaser
+*/
+
+.sidebar-content .text-teaser {
+    background: url(../../images/background/teaser-header-line.png) top no-repeat #ededed;
+    width: 170px;
+    padding: 12px 0 10px 10px;
+
+    //@include box-shadow(1px 1px 1px 1px rgba(181, 181, 181, 0.9));
+
+    -webkit-box-shadow: 1px 1px 1px 1px rgba(181, 181, 181, 0.9);
+    -moz-box-shadow: 1px 1px 1px 1px rgba(181, 181, 181, 0.9);
+    box-shadow: 1px 1px 1px 1px rgba(181, 181, 181, 0.9);
+    margin-bottom: 15px;
+}
+.sidebar-content  .text-teaser h4 {
+    color: #666666;
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+.sidebar-content .text-teaser strong,
+.sidebar-content .text-teaser p {
+    color: $color-teaser-text;
+    font-size: 12px;
+    display: inline;
+    line-height: 17px;
+}
+.sidebar-content .text-teaser img {
+    margin-bottom: 11px;
+}

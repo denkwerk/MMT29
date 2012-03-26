@@ -1,0 +1,55 @@
+@import '../images/icons/*.png';
+
+/*
+    Icons-Header
+*/
+.icon-bar ul{
+    float: right;
+}
+.icon-bar li {
+    float: left;
+    margin-right: 23px;
+    margin-top: 22px;
+}
+.icon-bar li.last {
+    margin-right: 11px;
+}
+.icon-bar a.star {
+    //background: url(../images/icons/ico-star.png) no-repeat;
+    @include icons-sprite(ico-star);
+    width: image-width("../images/icons/ico-star.png");
+    height: 25px;
+}
+.icon-bar a.folder {
+    //background: url(../images/icons/ico-folder.png) no-repeat;
+    @include icons-sprite(ico-folder);
+    width: 28px;
+    height: 25px;
+}
+.icon-bar a.message {
+    //background: url(../images/icons/ico-message.png) no-repeat;
+    @include icons-sprite(ico-message);
+    width: 28px;
+    height: 25px;
+}
+.icon-bar a.cart {
+    //background: url(../images/icons/ico-cart.png) no-repeat;
+    @include icons-sprite(ico-cart);
+    width: 28px;
+    height: 25px;
+}
+
+/*
+    Pfeil Links
+*/
+a.arrow {
+    margin-left: 5px;
+}
+.arrow-icon {
+    //background: url(../images/icons/ico-arrow.png) no-repeat;
+    @include icons-sprite(ico-arrow);
+    display: inline-table;
+    width: 7px;
+    height: 7px;
+    padding-right: 4px;
+}
