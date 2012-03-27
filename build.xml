@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="mm29" default="deploy" basedir="compass" >
+<project name="<Project Name>" default="usage" basedir="compass">
+    
+    <description>
+        Build file for <Project Name>.
+     
+        Content: 
+            1. Compile related tasks
+            2. Deploy related tasks
+            3. Clean related tasks
+    </description>
 
     <!-- ##################################################
         How to use:
@@ -10,60 +19,75 @@
            - run "ant deploy-preview" or "ant deploy-production"
              to deploy files
            - run "ant compile-preview" or "compile-production" 
-             if you only want to compress with compass
-
+             if you only want to compile with compass
     ################################################## -->
 
 
     <!-- modifie these settings for you computer -->
-    <property name="complass-exec" value="compass"/>
+    <property name="compass-exec" value="compass"/>
     <property name="stage-preview-path" value="${basedir}\..\build\preview"/>
-    <property name="stage-prduction-path" value="${basedir}\..\build\production"/>
+    <property name="stage-production-path" value="${basedir}\..\build\production"/>
 
+    <target name="usage" description="Display usage information">
+        <echo message="Execute 'ant -projecthelp' for build file help." />
+        <echo message="Execute 'ant -help' for Ant help." />
+    </target>
 
     <!-- create a white-list of files that should be deployed -->
-    <fileset id="deployable" dir="${basedir}">
-        <include name="**/*.html" />
+    <fileset id="deployable" dir="${basedir}\..\">
+		<include name="**/*.html" />
         <include name="**/*.htm" />
+        <include name="**/*.php" />
         <include name="**/*.css" />
         <include name="**/*.js" />
         <include name="**/*.png" />
-        <include name="**/*.jpg" />
     </fileset>
 
-    <!-- set default compile settings -->
-    <target name="compile" depends="compile-preview"/>
 
-    <!-- compile pretty for dev purposes, i.e. no compression, etc. -->
-    <target name="compile-preview">
+<!-- =============================== 
+     [Compile] related tasks 
+================================ --> 
+    <target name="compile" depends="compile-preview" description="set default compile settings" />
+
+    <target name="compile-preview" description="compile pretty for dev purposes, i.e. no compression, etc.">
         <echo message="compiling with compass ..."/>
-        <exec executable="${complass-exec}" output="compass-output.txt">
-            <arg line="compile --force" />
+        <exec executable="${compass-exec}">
+            <arg line="compile -e development --force" />
         </exec>
     </target>
 
-    <!-- compile for production purposes, i.e. compresed, etc. -->
-    <target name="compile-production">
+    <target name="compile-production" description="compile for production purposes, i.e. compressed, etc.">
         <echo message="compiling with compass ..."/>
-        <exec executable="${complass-exec}" output="compass-output.txt">
+
+        <exec executable="${compass-exec}">
             <arg line="compile -e production --force" />
         </exec>
     </target>
+    
+<!-- =============================== 
+     [Deploy] related tasks 
+================================ --> 
+    <target name="deploy" depends="deploy-preview" description="define default deployment behavior" />
 
-    <!-- define default deployment behaviour -->
-    <target name="deploy" depends="deploy-preview"/>
-
-    <!-- deploy files to production -->
-    <target name="deploy-production" depends="compile-production,clear-sass-cache">
-        <delete dir="${stage-prduction-path}"/>
-        <mkdir dir="${stage-prduction-path}"/>
-        <copy todir="${stage-prduction-path}">
+    <target name="deploy-production" depends="compile-production" description="deploy files to production">
+        <delete dir="${stage-production-path}"/>
+        <mkdir dir="${stage-production-path}"/>
+        <copy todir="${stage-production-path}">
             <fileset refid="deployable" />
         </copy>
+        <antcall target="clear-sass-cache" />
     </target>
 
-    <!-- deploy files to preview -->
-    <target name="deploy-preview" depends="compile-preview,clear-sass-cache">
+    <target name="deploy-preview" depends="compile-preview" description="deploy files to preview">
+        <delete dir="${stage-preview-path}" />
+        <mkdir dir="${stage-preview-path}" />
+        <copy todir="${stage-preview-path}">
+            <fileset refid="deployable" />
+        </copy>
+        <antcall target="clear-sass-cache" />
+    </target>
+
+    <target name="deploy-preview-compress" depends="compile-production" description="deploy files to preview">
         <delete dir="${stage-preview-path}"/>
         <mkdir dir="${stage-preview-path}"/>
         <copy todir="${stage-preview-path}">
@@ -71,31 +95,18 @@
         </copy>
     </target>
 
-
-    <!-- deploy files to preview -->
-    <target name="deploy-preview-compress" depends="compile-production">
+<!-- =============================== 
+     [Clean] related tasks 
+================================ --> 
+    <target name="clear" description="delete all deployed files">
         <delete dir="${stage-preview-path}"/>
-        <mkdir dir="${stage-preview-path}"/>
-        <copy todir="${stage-preview-path}">
-            <fileset refid="deployable" />
-        </copy>
+        <delete dir="${stage-production-path}"/>
     </target>
 
-    <!-- delete all deployed files -->
-    <target name="clear">
-        <delete dir="${stage-preview-path}"/>
-        <delete dir="${stage-prduction-path}"/>
-    </target>
-
-    <!-- delete all deployed files -->
-    <target name="clear-sass-cache">
+    <target name="clear-sass-cache" description="delete all deployed files">
         <echo message="compass clean"/>
-        <!--
-        <exec executable="${complass-exec}" output="compass-output.txt">
+        <exec executable="${compass-exec}" output="compass-output.txt">
             <arg line="clean" />
         </exec>
-        -->
     </target>
-
-
 </project>
